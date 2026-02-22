@@ -1,0 +1,7 @@
+# Capa: Bronze | Origen: NY-TripData-2016-03
+# Definición: Datos "Raw" persistidos en su formato original para trazabilidad completa.
+# Lógica: Carga distribuida mediante Spark para optimizar el uso de memoria en el cluster.
+taxis_raw_bronze:
+  type: spark.SparkDataset
+  table: main.default.taxis_raw
+  file_format: delta
