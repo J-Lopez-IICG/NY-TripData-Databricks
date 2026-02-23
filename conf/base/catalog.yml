@@ -1,9 +1,8 @@
 # Capa: Bronze | Origen: Volumen de Gestión (Archivos Raw)
 # Definición: Repositorio de aterrizaje para archivos CSV pesados.
-# Lógica: Lectura perezosa (lazy) desde Volumes para evitar desbordamiento de memoria.
 taxis_raw_bronze:
   type: spark.SparkDataset
-  path: /Volumes/hive_metastore/gestion_raw/raw_files_volume/yellow_tripdata_2016-03.csv
+  path: /Volumes/main/gestion_raw/raw_files_volume/yellow_tripdata_2016-03.csv
   file_format: csv
   load_args:
     header: true
