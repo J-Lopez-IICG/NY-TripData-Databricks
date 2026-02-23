@@ -1,4 +1,4 @@
-# Capa: Bronze | Origen: Volumen de Gestión (Archivos Raw)
+# Capa: Bronze | Origen: Volumen de Gestión (Unity Catalog)
 # Definición: Repositorio de aterrizaje para archivos CSV pesados.
 taxis_raw_bronze:
   type: spark.SparkDataset
@@ -7,3 +7,4 @@ taxis_raw_bronze:
   load_args:
     header: true
     inferSchema: true
+    sep: ","
