@@ -8,16 +8,14 @@ name = "ny_tripdata"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
-    "ipython>=8.10",
-    "jupyterlab>=3.0",
-    "notebook",
-    "kedro[jupyter]~=1.2.0",
-    "kedro-datasets[pandas-csvdataset, pandas-exceldataset, pandas-parquetdataset, plotly-plotlydataset, plotly-jsondataset, matplotlib-matplotlibdataset, spark-sparkdataset]>=9.1",
+    "python-dotenv>=1.0.0",
+    "databricks-sql-connector>=3.0.0",
+    "sqlalchemy>=2.0.0",
+    "kedro~=1.2.0",
+    "kedro-datasets[pandas,sql]>=9.1",
     "kedro-viz>=6.7.0",
-    "scikit-learn~=1.5.1",
-    "seaborn~=0.12.1",
+    "ipython>=8.10",
 ]
-
 [project.scripts]
 "ny-tripdata" = "ny_tripdata.__main__:main"
 
@@ -85,3 +83,6 @@ select = [
     "T201", # Print Statement
 ]
 ignore = ["E501"]  # Ruff format takes care of line-too-long
+
+[tool.kedro_telemetry]
+project_id = "27e0d55d29f14b00adcae65ae815cbc9"

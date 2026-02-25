@@ -1,10 +1,19 @@
-# Capa: Bronze | Origen: Volumen de Gestión (Unity Catalog)
-# Definición: Repositorio de aterrizaje para archivos CSV pesados.
-taxis_raw_bronze:
-  type: spark.SparkDataset
-  path: /Volumes/main/gestion_raw/raw_files_volume/yellow_tripdata_2016-03.csv
-  file_format: csv
-  load_args:
-    header: true
-    inferSchema: true
-    sep: ","
+# conf/base/catalog.yml
+
+prueba_conexion_kedro:
+  type: pandas.SQLQueryDataset
+  sql: "SELECT 1 AS prueba, 'Kedro conectado a Databricks' AS mensaje"
+  credentials: databricks_credentials
+
+raw_yellow_trips_sample:
+  type: pandas.SQLQueryDataset
+  sql: >
+    SELECT * FROM read_files(
+      '/Volumes/main/gestion_raw/raw_files_volume/yellow_trip_part_*',
+      format => 'csv',
+      header => 'true',
+      schema => 'VendorID string, tpep_pickup_datetime string, tpep_dropoff_datetime string, passenger_count double, trip_distance double, pickup_longitude double, pickup_latitude string, RatecodeID string, store_and_fwd_flag string, dropoff_longitude double, dropoff_latitude double, payment_type double, fare_amount double, extra double, mta_tax double, tip_amount double, tolls_amount double, improvement_surcharge double, total_amount double'
+    )
+    WHERE VendorID != 'VendorID'
+    LIMIT 10
+  credentials: databricks_credentials
