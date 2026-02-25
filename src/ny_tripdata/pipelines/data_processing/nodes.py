@@ -13,7 +13,7 @@ def create_silver_table() -> str:
     query = """
         CREATE OR REPLACE TABLE main.gestion_silver.silver_yellow_trips AS
         SELECT 
-            VendorID,q
+            VendorID,
             try_cast(tpep_pickup_datetime AS TIMESTAMP) AS tpep_pickup_datetime,
             try_cast(tpep_dropoff_datetime AS TIMESTAMP) AS tpep_dropoff_datetime,
             passenger_count,

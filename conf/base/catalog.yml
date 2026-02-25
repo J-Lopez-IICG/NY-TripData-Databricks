@@ -1,10 +1,5 @@
 # conf/base/catalog.yml
 
-prueba_conexion_kedro:
-  type: pandas.SQLQueryDataset
-  sql: "SELECT 1 AS prueba, 'Kedro conectado a Databricks' AS mensaje"
-  credentials: databricks_credentials
-
 raw_yellow_trips_sample:
   type: pandas.SQLQueryDataset
   sql: >

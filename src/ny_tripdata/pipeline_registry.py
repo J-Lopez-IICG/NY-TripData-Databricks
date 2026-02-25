@@ -1,17 +1,15 @@
-"""Project pipelines."""
-
 from typing import Dict
 from kedro.pipeline import Pipeline
 from ny_tripdata.pipelines import data_processing as dp
+from ny_tripdata.pipelines import analytics as an
 
 
 def register_pipelines() -> Dict[str, Pipeline]:
-    """Register the project's pipelines."""
-
-    # Cargamos el pipeline que acabas de crear
-    data_processing_pipeline = dp.create_pipeline()
+    processing_pipe = dp.create_pipeline()
+    analytics_pipe = an.create_pipeline()
 
     return {
-        "__default__": data_processing_pipeline,
-        "dp": data_processing_pipeline,
+        "__default__": processing_pipe + analytics_pipe,
+        "dp": processing_pipe,
+        "an": analytics_pipe,
     }
