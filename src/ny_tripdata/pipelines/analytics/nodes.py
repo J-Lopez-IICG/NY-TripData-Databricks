@@ -3,29 +3,26 @@ from databricks import sql
 from dotenv import load_dotenv
 
 
-def create_gold_vendor_efficiency() -> str:
+def create_gold_fact_trips() -> str:
     """
-    Nodo Analytics: Calcula la rentabilidad (ingresos por milla)
-    de cada proveedor usando los datos limpios de Silver.
+    Nodo Gold: Genera la tabla de hechos final con todos los registros
+    limpios y validados según el EDA.
     """
     load_dotenv()
     host = os.getenv("DATABRICKS_HOST", "").replace("https://", "")
     token = os.getenv("DATABRICKS_TOKEN")
     warehouse_id = os.getenv("DATABRICKS_WAREHOUSE_ID")
 
+    # Esta consulta genera la tabla completa, no un resumen
     query = """
-    CREATE OR REPLACE TABLE main.gestion_gold.gold_vendor_efficiency AS
+    CREATE OR REPLACE TABLE main.gestion_gold.gold_fact_trips AS
     SELECT 
-        VendorID,
-        count(*) as total_viajes,
-        round(sum(total_amount), 2) as ingresos_totales,
-        round(sum(trip_distance), 2) as distancia_total,
-        -- Métrica clave: Ingreso por Milla
-        round(sum(total_amount) / sum(trip_distance), 2) as ingreso_por_milla
-    FROM main.gestion_silver.silver_yellow_trips
-    WHERE trip_distance > 0 AND total_amount > 0
-    GROUP BY 1
-    ORDER BY ingreso_por_milla DESC;
+        * FROM main.gestion_silver.silver_yellow_trips
+    WHERE tpep_pickup_datetime IS NOT NULL              -- Hallazgo EDA: 1 nulo
+      AND trip_distance > 0 AND trip_distance < 500      -- Hallazgo EDA: 71k con 0 y outliers de 1.9M
+      AND total_amount > 0                              -- Hallazgo EDA: 4.5k negativos
+      AND passenger_count > 0                           -- Hallazgo EDA: 608 con 0
+      AND payment_type IS NOT NULL;                     -- Hallazgo EDA: 8 nulos
     """
 
     try:
@@ -38,6 +35,6 @@ def create_gold_vendor_efficiency() -> str:
         cursor.execute(query)
         cursor.close()
         connection.close()
-        return "Tabla de Eficiencia de Proveedores creada en Gold."
+        return "Tabla Gold de Hechos (12M registros filtrados) creada con éxito."
     except Exception as e:
-        raise Exception(f"Error en Analytics Vendor: {e}")
+        raise Exception(f"Error creando Fact Table en Gold: {e}")
